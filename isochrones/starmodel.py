@@ -801,7 +801,7 @@ class StarModel(object):
         else:
             raise AttributeError('MCMC must be run to access sampler')
 
-    def _make_samples(self):
+    def _make_samples(self, min_acc_frac=0.15):
 
         if not self.use_emcee:
             filename = '{}post_equal_weights.dat'.format(self.mnest_basename)
@@ -818,7 +818,7 @@ class StarModel(object):
                 raise
         else:
             #select out only walkers with > 0.15 acceptance fraction
-            ok = self.sampler.acceptance_fraction > 0.15
+            ok = self.sampler.acceptance_fraction > min_acc_frac
 
             chain = self.sampler.chain[ok,:,:]
             chain = chain.reshape((chain.shape[0]*chain.shape[1],

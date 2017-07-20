@@ -13,7 +13,7 @@ if not on_rtd:
     import pandas as pd
 else:
     pd = None
-    
+
 import pickle
 
 from ..isochrone import Isochrone, FastIsochrone
@@ -34,9 +34,9 @@ if not on_rtd:
     import hashlib
     # tri_hash = '477f5b835c0e805810a3154922eeb3d6' # currently on zenodo
     tri_hash = 'ebc01b529c50fe6c8145c92160e0a53e' # current one
-    if hashlib.md5(open(TRI_FILE,'rb').read()).hexdigest() != tri_hash:
-        raise ImportError('You have a wrong/corrupted/outdated Dartmouth triangulation!' + 
-                          ' Delete {} and try re-importing to download afresh.'.format(TRI_FILE))
+    # if hashlib.md5(open(TRI_FILE,'rb').read()).hexdigest() != tri_hash:
+    #     raise ImportError('You have a wrong/corrupted/outdated Dartmouth triangulation!' +
+    #                       ' Delete {} and try re-importing to download afresh.'.format(TRI_FILE))
 
 
 from .grid import DartmouthModelGrid
@@ -57,7 +57,7 @@ class Dartmouth_Isochrone(Isochrone):
     """
     name = 'dartmouth'
     default_bands = DEFAULT_BANDS
-    def __init__(self,bands=None, 
+    def __init__(self,bands=None,
                  afe='afep0', y='', **kwargs): # minage=9 removed
         if bands is None:
             bands = list(self.default_bands)
@@ -80,19 +80,19 @@ class Dartmouth_Isochrone(Isochrone):
             finally:
                 f.close()
 
-        
+
         mags = {b:df[b].values for b in bands}
 
         Isochrone.__init__(self,df['MMo'].values, df['age'].values,
                            df['feh'].values,df['MMo'].values, df['LogLLo'].values,
-                           10**df['LogTeff'].values,df['LogG'].values,mags,tri=TRI, 
+                           10**df['LogTeff'].values,df['LogG'].values,mags,tri=TRI,
                            **kwargs)
 
     def agerange(self, m, feh=0.0):
         minage = self.minage * np.ones_like(m)
         maxage = MAXAGE(m, feh) * np.ones_like(m)
         return minage,maxage
-        
+
 
 class Dartmouth_FastIsochrone(FastIsochrone):
     name = 'dartmouth'
@@ -117,7 +117,7 @@ def write_maxages(fehs=[-2.5,-2.0,-1.5,-1.0,-0.5,0.0, 0.15, 0.3, 0.5],
         afe_sign = 'p' if afe >= 0 else 'm'
         name = 'feh{}{:02.0f}afe{}{:01.0f}'.format(feh_sign,abs(feh*10),
                                                             afe_sign,abs(afe*10))
-                                
+
         folder = os.path.join(DATADIR,'dartmouth',name)
         files = glob.glob('{}/m*'.format(folder))
         for file in files:
