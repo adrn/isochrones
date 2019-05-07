@@ -22,11 +22,12 @@ ONE_OVER_ROOT_2PI = 1./_norm_pdf_C
 _norm_pdf_logC = np.log(_norm_pdf_C)
 LOG_ONE_OVER_ROOT_2PI = np.log(ONE_OVER_ROOT_2PI)
 
-
+@jit(nopython=True)
 def _norm_pdf(x):
     return np.exp(-x**2/2.0) / _norm_pdf_C
 
 
+@jit(nopython=True)
 def _norm_logpdf(x):
     return -x**2 / 2.0 - _norm_pdf_logC
 
