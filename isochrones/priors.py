@@ -10,6 +10,7 @@ if not on_rtd:
     from scipy.stats import uniform, lognorm
     from scipy.integrate import quad
     # from scipy.stats._continuous_distns import _norm_pdf, _norm_cdf, _norm_logpdf
+    from scipy.stats._continuous_distns import _norm_cdf
 
     import matplotlib.pyplot as plt
     from numba import jit
